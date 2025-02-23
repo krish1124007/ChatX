@@ -1,0 +1,2 @@
+# ChatX
+ChatX app frontend
