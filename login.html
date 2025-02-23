@@ -1,0 +1,192 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>ChatX Login</title>
+    <style>
+        /* Google Font */
+        @import url('https://fonts.googleapis.com/css2?family=Poppins:wght@300;400;600&display=swap');
+
+        * {
+            margin: 0;
+            padding: 0;
+            box-sizing: border-box;
+            font-family: 'Poppins', sans-serif;
+        }
+
+        body {
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            height: 100vh;
+            background: linear-gradient(135deg, #667eea, #764ba2);
+            overflow: hidden;
+            padding: 20px;
+        }
+
+        /* Animated Background */
+        .background {
+            position: absolute;
+            width: 200%;
+            height: 200%;
+            background: radial-gradient(circle, rgba(255,255,255,0.1) 0%, rgba(255,255,255,0) 80%);
+            animation: moveBackground 8s linear infinite alternate;
+        }
+
+        @keyframes moveBackground {
+            0% { transform: translate(-10%, -10%); }
+            100% { transform: translate(10%, 10%); }
+        }
+
+        /* Login Box */
+        .login-container {
+            position: relative;
+            width: 100%;
+            max-width: 400px;
+            padding: 30px;
+            border-radius: 15px;
+            background: rgba(255, 255, 255, 0.15);
+            backdrop-filter: blur(12px);
+            box-shadow: 0px 0px 20px rgba(255, 255, 255, 0.2);
+            text-align: center;
+        }
+
+        h2 {
+            color: white;
+            margin-bottom: 20px;
+        }
+
+        /* Input Fields */
+        .input-box {
+            position: relative;
+            margin-bottom: 25px;
+            text-align: left;
+        }
+
+        .input-box input {
+            width: 100%;
+            padding: 12px;
+            border: none;
+            outline: none;
+            font-size: 16px;
+            color: white;
+            background: transparent;
+            border-bottom: 2px solid white;
+            transition: 0.3s;
+        }
+
+        .input-box label {
+            position: absolute;
+            left: 10px;
+            top: 50%;
+            transform: translateY(-50%);
+            color: white;
+            font-size: 16px;
+            pointer-events: none;
+            transition: 0.3s;
+        }
+
+        /* Input Focus Animation */
+        .input-box input:focus ~ label,
+        .input-box input:valid ~ label {
+            top: 0px;
+            font-size: 12px;
+            color: #ffffff;
+        }
+
+        .input-box input:focus {
+            border-bottom: 2px solid #4091ae;
+        }
+
+        .login-container p {
+            margin-top: 15px;
+            font-size: 14px;
+            color: white;
+        }
+        .login-container p a{
+            color: #cdf346;
+            text-decoration: none;
+        }
+        /* Button Styles */
+        button {
+            width: 100%;
+            padding: 12px;
+            font-size: 16px;
+            border: none;
+            background: #2ca6c7;
+            color: #fff;
+            cursor: pointer;
+            border-radius: 8px;
+            transition: all 0.3s ease;
+        }
+
+        button:hover {
+            background: #3255c7;
+            transform: scale(1.05);
+        }
+
+        /* Error Message */
+        .error-message {
+            color: red;
+            font-size: 14px;
+            display: none;
+            margin-top: 10px;
+        }
+
+        /* Responsive Design */
+        @media (max-width: 768px) {
+            .login-container {
+                width: 100%;
+                max-width: 90%;
+                padding: 25px;
+            }
+        }
+
+    </style>
+</head>
+<body>
+    <div class="background"></div>
+
+    <div class="login-container">
+        <h2>ChatX Login</h2>
+        <form id="loginForm">
+            <div class="input-box">
+                <input type="text" id="username" required>
+                <label>Username</label>
+            </div>
+            <div class="input-box">
+                <input type="password" id="password" required>
+                <label>Password</label>
+            </div>
+            <button type="submit">Login</button>
+            <p class="error-message">Invalid credentials, try again!</p>
+        </form>
+        <p>Don't have an account? <a href="https://krish1124007.github.io/ChatX/signup.html">Login</a></p>
+    </div>
+
+    <script src="https://cdn.jsdelivr.net/npm/axios/dist/axios.min.js"></script>
+    <script>
+        document.getElementById('loginForm').addEventListener('submit', function(event) {
+            event.preventDefault();
+            
+            const username = document.getElementById('username').value;
+            console.log(username)
+            const password = document.getElementById('password').value;
+            console.log(password)
+
+            axios.post('https://chatx-backend-y8tg.onrender.com/api/v1/users/login', { username, password })
+            .then(response => {
+                console.log(response)
+                localStorage.setItem('chatxToken', response.data.data.AccessToken);
+                window.open('https://krish1124007.github.io/ChatX/chatlist.html', '_self');
+                // Redirect or perform any action after login
+            })
+            .catch(error => {
+                document.querySelector('.error-message').style.display = 'block';
+                console.error('Login failed:', error);
+            });
+        });
+    </script>
+</body>
+</html>
